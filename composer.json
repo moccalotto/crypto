@@ -1,0 +1,22 @@
+{
+    "name": "moccalotto/crypto",
+    "type": "library",
+    "description": "Tiny mcrypt wrapper for PHP",
+    "keywords": ["mcrypt", "security", "encryption", "AES", "cipher", "cryptography", "symmetric key cryptography", "crypto"],
+    "require": {
+        "php": ">=5.4.0",
+    },
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kim Ravn Hansen",
+            "email": "moccalotto@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Moccalotto\\Crypto\\": ""
+        }
+    }
+}
