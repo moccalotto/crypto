@@ -9,7 +9,9 @@ class MysqlCipher extends Cipher
 {
     protected $actualKeySize;
 
-    public function __construct($block_encryption_mode)
+    const MYSQL_DEFAULT = 'aes-128-ecb';
+
+    public function __construct($block_encryption_mode = self::MYSQL_DEFAULT)
     {
         // AES is rijndael with a block size of 128.
         // rijndael itself can have block sizes of 128, 192 and 256.
@@ -26,7 +28,7 @@ class MysqlCipher extends Cipher
         if ($algorithm !== 'aes') {
             throw new \UnexpectedValueException('Only AES compatibility is supported by this library');
         }
-        parent::__construct(MCRYPT_RIJNDAEL_128, $block_mode, new Pkcs7DataPadding() new MysqlKeyPadding());
+        parent::__construct(MCRYPT_RIJNDAEL_128, $block_mode, new Pkcs7DataPadding(), new MysqlKeyPadding());
     }
 
     public function getKeySize()
