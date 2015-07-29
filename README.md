@@ -19,14 +19,17 @@ $cipher = new Cipher(
 );
 
 
-$initialization_vector = openssl_random_pseudo_bytes($cipher->getIvSize()); // we could use $cipher->getRandomIv()
 $passphrase = 'my fancy and very long passphrase';
+
+$initialization_vector = openssl_random_pseudo_bytes($cipher->getIvSize()); 
+// we could do this:
+// $initialization_vector = $cipher->getRandomIv()
 
 $manager = new Manager($cipher);
 $ciphertext = $manager->encrypt(
     'this is some plain text',
     $passphrase,
-    substr($initialization_vector, 0, $cipher->getIvSize())
+    $initialization_vector
 );
 
 echo $manager->decrypt(
