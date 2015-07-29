@@ -76,6 +76,9 @@ class Cipher
 
     public function getRandomIv()
     {
+        if (0 === $this->getIvSize()) {
+            return '';
+        }
         return mcrypt_create_iv($this->getIvSize());
     }
 
