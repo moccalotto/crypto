@@ -2,16 +2,20 @@
 
 namespace Moccalotto\Crypto;
 
+use Moccalotto\Crypto\DataPadding\Pkcs7DataPadding;
+use Moccalotto\Crypto\KeyPadding\MysqlKeyPadding;
+
 class MysqlCipher extends Cipher
 {
     protected $actualKeySize;
 
     public function __construct($block_encryption_mode)
     {
-        // AES is always rijndael with a block size of 128.
-        // rijndael can have block sizes of 128, 192 and 256.
+        // AES is rijndael with a block size of 128.
+        // rijndael itself can have block sizes of 128, 192 and 256.
         // It can also support key sizes of 128, 192 and 256, independantly of the block size.
-        // AES has a fixed block size,but support key sizes of 128, 192 or 256 bits.
+        // AES has a fixed block size, but support key sizes of 128, 192 or 256 bits.
+        // Therefore we use MCRYPT_RIJNDAEL_128, but vary the key sizes.
 
 
         // parse the $block_encryption_mode to see which key size is to be used.
@@ -22,7 +26,7 @@ class MysqlCipher extends Cipher
         if ($algorithm !== 'aes') {
             throw new \UnexpectedValueException('Only AES compatibility is supported by this library');
         }
-        parent::__construct(MCRYPT_RIJNDAEL_128, $block_mode, new DataPadding(DataPadding::MODE_PKCS7) new KeyPadding(KeyPadding::MODE_MYSQL));
+        parent::__construct(MCRYPT_RIJNDAEL_128, $block_mode, new Pkcs7DataPadding() new MysqlKeyPadding());
     }
 
     public function getKeySize()

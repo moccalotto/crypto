@@ -11,7 +11,7 @@ class Cipher
     protected $dataPadding;
     protected $keyPadding;
 
-    public function __construct($descriptor, $blockMode, DataPadding $dataPadding, KeyPadding $keyPadding)
+    public function __construct($descriptor, $blockMode, DataPaddingInterface $dataPadding, KeyPaddingInterface $keyPadding)
     {
         if (!in_array($descriptor, mcrypt_list_algorithms())) {
             throw new \RuntimeException(sprintf(

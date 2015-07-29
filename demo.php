@@ -1,7 +1,3 @@
-# crypto
-A small mcrypt wrapper for encryption
-
-```php
 <?php
 
 require 'vendor/autoload.php';
@@ -34,4 +30,3 @@ echo $manager->decrypt(
     $passphrase,
     $initialization_vector
 );
-```
