@@ -1,40 +1,19 @@
 # crypto
-A small mcrypt wrapper for encryption
+
+Encrypt data using aes-128-cbc. Message authentication is done via sha-256 HMAC
 
 ```php
 <?php
 
+use Moccalotto\Crypto\Crypto;
+
 require 'vendor/autoload.php';
 
-use Moccalotto\Crypto\Cipher;
-use Moccalotto\Crypto\Manager;
-use Moccalotto\Crypto\DataPadding\Pkcs7DataPadding;
-use Moccalotto\Crypto\KeyPadding\Pkcs7KeyPadding;
+$key = 'some secret key';
 
-$cipher = new Cipher(
-    MCRYPT_RIJNDAEL_256,
-    MCRYPT_MODE_CBC,
-    new Pkcs7DataPadding(),
-    new Pkcs7KeyPadding()
-);
+$plaintext = 'This is the secret plaintext to be encrypted';
 
+$encrypted = Crypto::with($key)->encrypt($plaintext);
 
-$passphrase = 'my fancy and very long passphrase';
-
-$initialization_vector = openssl_random_pseudo_bytes($cipher->getIvSize()); 
-// we could do this:
-// $initialization_vector = $cipher->getRandomIv()
-
-$manager = new Manager($cipher);
-$ciphertext = $manager->encrypt(
-    'this is some plain text',
-    $passphrase,
-    $initialization_vector
-);
-
-echo $manager->decrypt(
-    $ciphertext,
-    $passphrase,
-    $initialization_vector
-);
+echo Crypto::with($key)->decrypt($encrypted);
 ```

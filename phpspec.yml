@@ -1,0 +1,3 @@
+suites:
+    crypto_suite:
+        src_path: .
