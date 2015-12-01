@@ -9,7 +9,7 @@ class EncryptedData
     protected $auth;
     protected $iv;
     protected $ciphertext;
-    
+
     // hash algorithm
     protected $hash;
     protected $hashBytes;
@@ -75,14 +75,14 @@ class EncryptedData
         ];
     }
 
-    public function toString()
+    public function toText()
     {
         return base64_encode(serialize($this->toArray()));
     }
 
     public function __toString()
     {
-        return $this->toString();
+        return $this->toText();
     }
 
     public function getCipher()
