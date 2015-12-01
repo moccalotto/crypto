@@ -10,4 +10,4 @@ $plaintext = 'This is the secret plaintext to be encrypted';
 
 $encrypted = Crypto::with($key)->encrypt($plaintext);
 
-echo Crypto::with($key)->decrypt($encrypted);
+echo Crypto::with($key)->decrypt($encrypted) . PHP_EOL;
