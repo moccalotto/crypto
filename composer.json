@@ -22,5 +22,8 @@
         "psr-4": {
             "Moccalotto\\Crypto\\": ""
         }
+    },
+    "archive": {
+        "exclude": ["spec", "demo.php"]
     }
 }
