@@ -1,4 +1,5 @@
 # Crypto
+[![Build Status](https://travis-ci.org/moccalotto/crypto.svg)](https://travis-ci.org/moccalotto/crypto)
 
 Encrypt data using aes-128-cbc. Message authentication is done via sha-256 HMAC
 
