@@ -50,8 +50,7 @@ class EncryptedData
             $hashBytes,
             $auth,
             $iv,
-            $ciphertext,
-        ) = $array;
+            $ciphertext) = $array;
 
         return new static($auth, $iv, $ciphertext, $hash, $hashBytes, $cipher, $keyBytes, $ivBytes);
     }

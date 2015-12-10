@@ -10,13 +10,13 @@ class Crypto
     protected $key;
 
     // hash algorithm
-    protected $hash        = 'sha256';
-    protected $hashBytes   = 32;
+    protected $hash = 'sha256';
+    protected $hashBytes = 32;
 
     // cipher algorithm
-    protected $cipher      = 'aes-128-cbc';
-    protected $keyBytes    = 32;
-    protected $ivBytes     = 16;
+    protected $cipher = 'aes-128-cbc';
+    protected $keyBytes = 32;
+    protected $ivBytes = 16;
 
     protected function ensureCorrectSalt($salt)
     {
@@ -34,6 +34,7 @@ class Crypto
      *
      * @param string $purpose
      * @param string $salt
+     *
      * @return string
      */
     public function getDerivedKey($purpose, $salt)
@@ -50,10 +51,10 @@ class Crypto
         // step 2: expand/derive an output key
         $key_so_far = '';
         $latest_key_block = '';
-        for ($i = 1; Bytes::count($key_so_far) < $this->keyBytes; $i++) {
+        for ($i = 1; Bytes::count($key_so_far) < $this->keyBytes; ++$i) {
             $latest_key_block = hash_hmac(
                 $this->hash,
-                $latest_key_block . $purpose . \chr($i),
+                $latest_key_block.$purpose.\chr($i),
                 $base_key,
                 true
             );
@@ -96,9 +97,10 @@ class Crypto
      * We only self-test the standard algorithms - deviate from the
      * standards at your own risk.
      *
-     * @param string $cipher The openssl cipher to use.
-     * @param int $keyBytes The size of the key in bytes.
-     * @param int $ivBytes The size of the initialization vector in bytes.
+     * @param string $cipher   The openssl cipher to use.
+     * @param int    $keyBytes The size of the key in bytes.
+     * @param int    $ivBytes  The size of the initialization vector in bytes.
+     *
      * @return $this
      */
     public function withCipher($cipher, $keyBytes, $ivBytes)
@@ -106,6 +108,7 @@ class Crypto
         $this->cipher = $cipher;
         $this->keyBytes = $keyBytes;
         $this->ivBytes = $ivBytes;
+
         return $this;
     }
 
@@ -116,14 +119,16 @@ class Crypto
      * We only self-test the standard algorithms - deviate from the
      * standards at your own risk.
      *
-     * @param string $hash The hash algoruth to use.
-     * @param int $hashBytes The size of the outputted raw digest.
+     * @param string $hash      The hash algoruth to use.
+     * @param int    $hashBytes The size of the outputted raw digest.
+     *
      * @return $this
      */
     public function withHash($hash, $hashBytes)
     {
         $this->hash = $hash;
         $this->hashBytes = $hashBytes;
+
         return $this;
     }
 
@@ -140,29 +145,31 @@ class Crypto
         );
 
         $auth = hash_hmac(
-            $this->hash, 
-            $iv . $ciphertext,
+            $this->hash,
+            $iv.$ciphertext,
             $this->getDerivedAuthenticationKey(),
             true
         );
 
         return new EncryptedData(
-            $auth, 
-            $iv, 
-            $ciphertext, 
+            $auth,
+            $iv,
+            $ciphertext,
             $this->hash,
-            $this->hashBytes, 
-            $this->cipher, 
-            $this->keyBytes, 
+            $this->hashBytes,
+            $this->cipher,
+            $this->keyBytes,
             $this->ivBytes
         );
     }
 
     /**
-     * Decrypt ciphertext into plaintext
+     * Decrypt ciphertext into plaintext.
      *
      * @param EncryptedData|string $ciphertext The data to be decrypted.
+     *
      * @return string the decrypted plaintext
+     *
      * @throws MessageTamperingException if the message has been tampered with.
      */
     public function decrypt($ciphertext)
@@ -170,7 +177,7 @@ class Crypto
         $data = $ciphertext instanceof EncryptedData ? $ciphertext : EncryptedData::fromText($ciphertext);
 
         if (!($data->getHash() === $this->hash && $data->getCipher() === $this->cipher)) {
-            return Crypto::with($this->key)
+            return self::with($this->key)
                 ->withHash($data->getHash(), $data->getHashBytes())
                 ->withCipher($data->getCipher(), $data->getKeyBytes(), $data->getIvBytes())
                 ->decrypt($ciphertext);
@@ -178,7 +185,7 @@ class Crypto
 
         $auth_should_be = hash_hmac(
             $this->hash,
-            $data->getIv() . $data->getCiphertext(),
+            $data->getIv().$data->getCiphertext(),
             $this->getDerivedAuthenticationKey(),
             true
         );
