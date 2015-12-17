@@ -31,26 +31,26 @@ class Bytes
     /**
      * Count the number of bytes in a binary string
      *
-     * @param string $str
+     * @param string $string
      *
      * @return int
      */
-    public static function count($str)
+    public static function count($string)
     {
-        return mb_strlen($str, '8bit');
+        return mb_strlen($string, '8bit');
     }
 
     /**
      * Get a slice of a binary string
      *
-     * @param string $str The binary string to slice
+     * @param string $string The binary string to slice
      * @param int $start The start position of the slice
      * @param int $length The length of the slice
      *
      * @return string
      */
-    public static function slice($str, $start, $length = null)
+    public static function slice($string, $start, $length = null)
     {
-        return mb_substr($str, $start, $length, '8bit');
+        return mb_substr($string, $start, $length, '8bit');
     }
 }
