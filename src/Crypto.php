@@ -7,15 +7,46 @@ class Crypto
     const PURPOSE_ENCRYPTION = 'encryption';
     const PURPOSE_AUTHENTICATION = 'authentication';
 
+    /*
+     * The base key used to derive authentication and encryption keys.
+     *
+     * @var string
+     */
     protected $key;
 
-    // hash algorithm
+    /*
+     * The name of the hash algorithm used for authentication
+     *
+     * @var string
+     */
     protected $hash = 'sha256';
+
+    /*
+     * The number of bytes in the raw hash digest
+     *
+     * @var int
+     */
     protected $hashBytes = 32;
 
-    // cipher algorithm
+    /*
+     * The identifier of the encryption algorithm
+     *
+     * @var string
+     */
     protected $cipher = 'aes-128-cbc';
+
+    /*
+     * The number of bytes in the encryption key
+     *
+     * @var int
+     */
     protected $keyBytes = 32;
+
+    /*
+     * The number of bytes in the initialization vector
+     *
+     * @var int
+     */
     protected $ivBytes = 16;
 
     protected function ensureCorrectSalt($salt)
@@ -64,6 +95,13 @@ class Crypto
         return Bytes::slice($key_so_far, 0, $this->keyBytes);
     }
 
+    /**
+     * Get the encryption key.
+     *
+     * The key is derived from $this->key
+     *
+     * @return string
+     */
     public function getDerivedEncryptionKey()
     {
         return $this->getDerivedKey(
@@ -72,6 +110,13 @@ class Crypto
         );
     }
 
+    /**
+     * Get the authentication key.
+     *
+     * The key is derived from $this->key
+     *
+     * @return string
+     */
     public function getDerivedAuthenticationKey()
     {
         return $this->getDerivedKey(
@@ -80,11 +125,23 @@ class Crypto
         );
     }
 
+    /**
+     * Constructor
+     *
+     * @param string $key
+     */
     public function __construct($key)
     {
         $this->key = $key;
     }
 
+    /**
+     * Create an object with the given key
+     *
+     * @param string $key
+     *
+     * @return Crypto
+     */
     public static function with($key)
     {
         return new static($key);
@@ -132,6 +189,13 @@ class Crypto
         return $this;
     }
 
+    /**
+     * Encrypt a string
+     *
+     * @param string $string
+     *
+     * @return EncryptedData
+     */
     public function encrypt($string)
     {
         $iv = Bytes::random($this->ivBytes);
