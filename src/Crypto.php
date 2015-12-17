@@ -49,6 +49,19 @@ class Crypto
      */
     protected $ivBytes = 16;
 
+    /**
+     * Ensure that salt has the correct number of bytes.
+     *
+     * Technically, this call is not necessary, as we hardcode the salt,
+     * but the encryption RFC specify it. We keep it here to be compatible
+     * with future changes to the salt.
+     *
+     * @link https://tools.ietf.org/html/rfc5869
+     *
+     * @param string|null $salt
+     *
+     * @return string
+     */
     protected function ensureCorrectSalt($salt)
     {
         if (null === $salt) {
@@ -61,7 +74,7 @@ class Crypto
     /**
      * Get a derived key.
      *
-     * see https://tools.ietf.org/html/rfc5869
+     * @link https://tools.ietf.org/html/rfc5869
      *
      * @param string $purpose
      * @param string $salt
