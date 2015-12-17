@@ -254,7 +254,7 @@ class Crypto
         $data = $ciphertext instanceof EncryptedData ? $ciphertext : EncryptedData::fromText($ciphertext);
 
         if (!($data->getHash() === $this->hash && $data->getCipher() === $this->cipher)) {
-            return self::with($this->key)
+            return static::with($this->key)
                 ->withHash($data->getHash(), $data->getHashBytes())
                 ->withCipher($data->getCipher(), $data->getKeyBytes(), $data->getIvBytes())
                 ->decrypt($ciphertext);
